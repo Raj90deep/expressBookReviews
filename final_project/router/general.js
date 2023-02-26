@@ -3,6 +3,7 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+const axios = require("axios").default;
 
 
 //Function to check if the user exists
@@ -69,5 +70,41 @@ public_users.get('/review/:isbn',function (req, res) {
     var get_book = books[req.params.isbn];
     res.status(200).send(JSON.stringify(get_book.reviews));
 });
+
+const getBooks = async(url) => {
+    const connect = axios.get(url);
+    let listOfBooks = (await connect);
+    console.log(listOfBooks)
+};
+getBooks("https://rajdeepchowd-5000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/");
+
+const getBookByISBN = (url) => {
+    axios.get(url)
+  .then(function (response) {
+    // handle success
+    console.log(response.data);
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+};
+
+getBookByISBN("https://rajdeepchowd-5000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/isbn/2")
+
+const getBookByAuthor = async(url) => {
+    const connect = axios.get(url);
+    let books = (await connect);
+    console.log("Samuel", books);
+};
+getBookByAuthor("https://rajdeepchowd-5000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/author/Samuel%20Beckett");
+
+const getBookByTitle = async(url) => {
+    const connect = axios.get(url);
+    let book = (await connect);
+    console.log("Fairy tales", book);
+};
+getBookByTitle("https://rajdeepchowd-5000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/title/Fairy%20tales");
+
 
 module.exports.general = public_users;
